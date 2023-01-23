@@ -1,0 +1,228 @@
+----------------создание базы Аэропорт--------------------
+
+set dateformat dmy
+
+drop database if exists Airport;
+
+create database Airport;
+
+
+
+drop table if exists flight;
+
+drop table if exists maintenance;
+
+drop table if exists slot;
+
+drop table if exists runway_tariff;
+
+drop table if exists aircraft_service;
+
+drop table if exists parking_service;
+
+drop table if exists parking_equipment;
+
+drop table if exists airfield_service_equipment;
+
+drop table if exists parking;
+
+drop table if exists parking_tariff;
+
+drop table if exists aircraft;
+
+drop table if exists model;
+
+drop table if exists airline; 
+
+
+create table  flight (
+	flight_id	integer not null primary key,	 
+	date	date, 
+	beginning	time,	 
+	finishing	time,	 
+	slot_id	integer,	 
+	aircraft_id	varchar(50),	 
+	route_id	integer,	 
+	terminal	varchar(50),	 
+	gate	integer,	 
+	sold_tickets	integer	
+ );
+
+
+ create table slot (
+	slot_id	integer not null primary key,
+	date	date,	 
+	beginning_time	time,	 
+	end_time	time,	 
+	aircraft_model_id	integer,	 
+	airline_id	integer,	 	 
+	tariff_id integer
+ );
+
+
+ create table airline (
+	airline_id	integer not null primary key,	 
+	name	varchar(50)	
+ );
+
+
+ create table model (
+	model_id	integer not null primary key, 
+	mark	varchar(50),	 
+	model	varchar(50),	 
+	max_distance	integer,	 
+	average_speed	integer,	 
+	number_of_seats	integer
+);
+
+
+create table aircraft (
+	airline_id	integer not null primary key, 
+	model_id	integer,	 
+	aircraft_id	varchar(50)
+);
+
+
+create table aircraft_service (
+	aircraft_service_id integer not null primary key,
+	aircraft_id	integer, 
+	service_id	integer,	 
+	date	date,	 
+	start_time	time,	 
+	end_time	time,	 
+	price	integer
+);
+
+
+create table parking_service (
+	service_id	integer not null primary key,	 
+	parking_equipment_id	integer,	 
+	model_id	integer,	 
+	price	integer
+);
+
+
+create table parking_equipment (
+	parking_equipment_id	integer not null primary key,	 
+	equipment_type_id	integer,	 
+	parking_zome_id	integer
+);
+
+
+create table parking (
+	zone_id	integer not null primary key, 
+	aircraft_id	varchar(50)	 ,
+	starting_datetime	datetime,	 
+	ending_datetime	datetime,	 
+	tariff_id	integer
+);
+
+
+create table maintenance (
+	slot_id	integer,	 
+	handling	varchar(50)
+);
+
+
+create table airfield_service_equipment (
+	type_id	integer not null primary key,	 
+	name	varchar(50),	 
+	quantity	varchar(50),	 
+	department_id	integer,	 
+	expence_last_month	integer
+);
+
+
+create table parking_tariff (
+	tariff_id	integer not null primary key,	 
+	name	varchar(50),	 
+	starting_date	date,	 
+	ending_date	date,	 
+	price_per_day	integer,
+);
+
+
+create table runway_tariff (
+	tariff_id	integer not null primary key,	 
+	name	varchar(50),	 
+	starting_date	date,	 
+	ending_date	date,	 
+	price_per_day	integer,
+);
+
+
+alter table flight add 
+	foreign key (slot_id)
+	references slot (slot_id),
+	foreign key (aircraft_id)
+	references aircraft (aircraft_id)
+
+
+alter table slot add 
+	foreign key (aircraft_model_id)
+	references model (model_id),
+	foreign key (airline_id)
+	references airline (airline_id),
+	foreign key (tariff_id)
+	references runway_tariff (tariff_id)
+
+
+alter table aircraft add 
+	foreign key (model_id)
+	references model (model_id),
+	foreign key (airline_id)
+	references airline (airline_id)
+
+
+alter table aircraft_service add 
+	foreign key (aircraft_id)
+	references aircraft (aircraft_id),
+	foreign key (service_id)
+	references parking_service (service_id)
+
+
+alter table parking_service add 
+	foreign key (parking_equipment_id)
+	references  parking_equipment (parking_equipment_id)
+
+
+alter table parking_equipment add 
+	foreign key (equipment_type_id)
+	references airfield_service_equipment (type_id),
+	foreign key (parking_zone_id)
+	references parking (zone_id)
+
+
+alter table parking add 
+	foreign key (tariff_id)
+	references parking_tariff (tariff_id),
+	foreign key (aircraft_id)
+	references aircraft (aircraft_id)
+
+
+alter table maintenance add 
+	foreign key (slot_id)
+	references slot (slot_id),
+	foreign key (handling)
+	references airfield_service_equipment (type_id)
+
+
+insert into airline values (001, 'aeroflot');
+
+
+insert into model values (001, 'boeing', '737-400', 4000, 800, 159);
+
+
+insert into aircraft values (001, 001, 001);
+
+
+insert into runway_tariff values (001, 'autumn', '2020-09-01', '2020-11-30', 800);
+
+
+insert into  slot values (001, '2020-10-04', '00:00:00', '05:00:00', 001, 001, 001);
+
+
+insert into airfield_service_equipment values (001, 'trailer', 100, 001, 10000);
+
+
+insert into maintenance values (001, 001);

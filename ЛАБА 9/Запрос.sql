@@ -1,0 +1,27 @@
+use Airport2;
+
+INSERT INTO SLOT VALUES (GETDATE(), '00:00:00', '23:00:00', 1, 1, 3);
+
+insert into flight values ( '2020-11-22', '06:00:00', '06:00:00', 69, 1, 24, 1, 2, 70),
+( '2020-10-20', '00:00:00', '01:00:00', 9, 10, 1, 1, 1, 100);
+
+UPDATE FLIGHT 
+SET  ROUTE_ID = 24,
+sold_tickets = 0,
+date = '2020-01-01',
+terminal = 503
+
+
+SELECT * FROM FLIGHT
+
+select * from SLOT
+
+SELECT * FROM AIRCRAFT JOIN MODEL ON AIRCRAFT.MODEL_ID = MODEL.MODEL_ID
+ORDER BY AIRCRAFT_ID
+
+SELECT * FROM AIRCRAFT JOIN MODEL ON AIRCRAFT.MODEL_ID = MODEL.MODEL_ID
+ORDER BY AIRCRAFT_ID
+
+drop trigger Flight_max_dist_slot_upd
+
+
